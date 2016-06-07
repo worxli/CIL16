@@ -60,3 +60,11 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+training/**
+test/**
+logs/**
+MNIST_data/**
+predictions_training/**
+**.csv
+
