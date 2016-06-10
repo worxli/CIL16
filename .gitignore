@@ -66,5 +66,6 @@ test/**
 logs/**
 MNIST_data/**
 predictions_training/**
+predictions_test/**
 **.csv
 

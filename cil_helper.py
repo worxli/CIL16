@@ -15,7 +15,6 @@ import tensorflow as tf
 
 
 
-NUM_CHANNELS = 3 # RGB images
 PIXEL_DEPTH = 255
 NUM_LABELS = 2
 
@@ -46,7 +45,7 @@ def img_crop(im, w, h):
             list_patches.append(im_patch)
     return list_patches
 
-def extract_data(filename, num_images):
+def extract_data(filename, num_images, preprocess=None):
     """Extract the images into a 4D tensor [image index, y, x, channels].
     Values are rescaled from [0, 255] down to [-0.5, 0.5].
     """
@@ -55,8 +54,10 @@ def extract_data(filename, num_images):
         imageid = "satImage_%.3d" % i
         image_filename = filename + imageid + ".png"
         if os.path.isfile(image_filename):
-            print ('Loading ' + image_filename)
+            #print ('Loading ' + image_filename)
             img = mpimg.imread(image_filename)
+            if preprocess:
+                img = preprocess(img)
             imgs.append(img)
         else:
             print ('File ' + image_filename + ' does not exist')
@@ -88,7 +89,7 @@ def extract_labels(filename, num_images):
         imageid = "satImage_%.3d" % i
         image_filename = filename + imageid + ".png"
         if os.path.isfile(image_filename):
-            print ('Loading ' + image_filename)
+            #print ('Loading ' + image_filename)
             img = mpimg.imread(image_filename)
             gt_imgs.append(img)
         else:
@@ -173,30 +174,6 @@ def make_img_overlay(img, predicted_img):
     new_img = Image.blend(background, overlay, 0.2)
     return new_img
 
-# Get prediction overlaid on the original image for given input file
-def get_prediction_with_overlay(filename, image_idx):
-
-    imageid = "satImage_%.3d" % image_idx
-    image_filename = filename + imageid + ".png"
-    img = mpimg.imread(image_filename)
-
-    img_prediction = get_prediction(img)
-    oimg = make_img_overlay(img, img_prediction)
-
-    return oimg
-
-# Get a concatenation of the prediction and groundtruth for given input file
-def get_prediction_with_groundtruth(filename, image_idx):
-
-    imageid = "satImage_%.3d" % image_idx
-    image_filename = filename + imageid + ".png"
-    img = mpimg.imread(image_filename)
-
-    img_prediction = get_prediction(img)
-    cimg = concatenate_images(img, img_prediction)
-
-    return cimg
-
 # Make an image summary for 3d tensor image with index idx
 def get_image_summary_3d(img):
     V = tf.slice(img, (0, 0, 0), (1, -1, -1))
@@ -227,3 +204,10 @@ def conv2d(x, W):
 def max_pool_2x2(x):
   return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                         strides=[1, 2, 2, 1], padding='SAME')
+def weight_variable(shape):
+  initial = tf.truncated_normal(shape, stddev=0.1)
+  return tf.Variable(initial)
+
+def bias_variable(shape):
+  initial = tf.constant(0.1, shape=shape)
+  return tf.Variable(initial)
