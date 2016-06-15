@@ -47,7 +47,7 @@ def img_crop(im, w, h):
 
 def extract_data(filename, num_images, preprocess=None):
     """Extract the images into a 4D tensor [image index, y, x, channels].
-    Values are rescaled from [0, 255] down to [-0.5, 0.5].
+    Values are rescaled from [0, 255] down to [0,1].
     """
     imgs = []
     for i in range(1, num_images+1):
@@ -58,6 +58,7 @@ def extract_data(filename, num_images, preprocess=None):
             img = mpimg.imread(image_filename)
             if preprocess:
                 img = preprocess(img)
+                print('image ' + str(i) + ' of ' + str(num_images) + ' preprocessed')
             imgs.append(img)
         else:
             print ('File ' + image_filename + ' does not exist')
