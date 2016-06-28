@@ -138,7 +138,7 @@ def label_to_img(imgwidth, imgheight, w, h, labels):
                 l = 1
             else:
                 l = 0
-            array_labels[j:j+w, i:i+h] = l
+            array_labels[i:i+h, j:j+w] = l
             idx = idx + 1
     return array_labels
 
@@ -204,6 +204,10 @@ def conv2d(x, W):
 
 def max_pool_2x2(x):
   return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                        strides=[1, 2, 2, 1], padding='SAME')
+
+def min_pool_2x2(x):
+  return tf.nn.min_pool(x, ksize=[1, 2, 2, 1],
                         strides=[1, 2, 2, 1], padding='SAME')
 
 def avg_pool_2x2(x):
