@@ -1,0 +1,77 @@
+\documentclass[10pt,conference,compsocconf]{IEEEtran}
+
+%\usepackage{times}
+%\usepackage{balance}
+\usepackage{url}
+\usepackage{graphicx}	% For figure environment
+
+
+\begin{document}
+\title{CIL 16}
+
+\author{
+ Balz Guenat \& Lukas Bischofberger\\
+  Department of Computer Science, ETH Zurich, Switzerland
+}
+
+\maketitle
+
+\begin{abstract}
+  
+\end{abstract}
+
+\section{Introduction}
+Image segmentation is a classic computer vision problem. But the reappearance of neural networks also made this problem interesting in new dicipline, the convolutional neural network (CNN). We tackle the problem of road segmentation in images taken from Google Maps with a CNN. Therefore we developed a new pipeline based on CNN, coupled with pre- and postprocessing to solve the challenging task. Our approach makes it's main contribution with a preprocessing and sample generation method.
+
+
+\section{[Models and Methods}
+First we preprocess the images to obtain more additional information which is not captured in RGB image data. Section .. explains the different methods we tried.
+Then we divided the image in patches of different sizes. We tried different parameters (2,4,8,16,32) for the patch size resulting in different coarseness levels. Section .. will explain how specifically an individual patch has been generated. Those patches are packed into batches and fed into the CNN whose configuration is further detailed in section ... Finally we have developed a postprocessing method to combine predictions from different coarseness levels and remove false positives from the final prediction.
+
+\subsection{Preprocessing}
+
+\subsection{Sample generation}
+1 random generation
+2 overlapping patches
+3 flip and rotate
+
+\subsection{CNN model}
+We used a simple convolutional network with three convolutional layers each followed by a RELU and maxpooling. The conv layers are followed by two fully connected layers with depth...
+
+
+\subsection{Postprocessing}
+As stated above we developed different models with changing patch sizes. These make all predictions which have their advantages. For example a CNN with patch sizes 2 can accurately predict small areas, this is specifically useful for removing false positives as e.g. green areas of tress should never be predicted as road. On the other hand with small patch sizes our model is not able to distinguish between a rooftop and a road which are both gray. Therefore we also need the bigger context to avoid these kind of false positives. In the postprecessing we are combining the predictions of models with patch sizes of [2,4,8,16,32] pixels. A final prediction of a pixel is basically classified as road if we obtain a majority vote looking at a pixel in all predictions of different patch sizes. 
+
+$p(x,y) = 1 if (p2(x,y)+p4(x,y)+p8(x,y)..))/n > th
+p(x,y) = 0 otherwise$
+
+
+
+
+\section{Evaluation}
+We compare our pipeline to the baseline algorithm. Further we evaluate our preprocessing methods quantitatively and the postprocessing method visually. 
+
+\subsection{Preprocessing}
+
+Three cases: 
+1 w/o data augmentation.
+2 with saturation and lumination
+3 with edge detection
+4 with texture from literature
+
+\subsection{Baseline comparision}
+
+\subsection{Postprocessing}
+e.g. image comparision
+
+
+\section{Discussion}
+
+
+
+\section{Summary}
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{howto-paper}
+\end{document}
