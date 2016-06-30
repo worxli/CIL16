@@ -1,0 +1,41 @@
+run name: eval_postproc16
+channels: 3
+no preprocessing
+training size: 40
+validation size: 10
+batch size: 64
+epochs: 10
+total steps: 806
+patch size: 16
+cut balancing
+conv1: 4,4,200
+conv2: 4,4,300
+conv3: 2,2,400
+fc1: 1200
+
+run name: eval_postproc8
+channels: 3
+no preprocessing
+training size: 40
+validation size: 10
+batch size: 64
+epochs: 10
+total steps: 4761
+patch size: 8
+cut balancing
+conv1: 4,4,200
+conv3: 2,2,400
+fc1: 1200
+
+run name: eval_postproc2
+channels: 3
+no preprocessing
+training size: 40
+validation size: 10
+batch size: 64
+epochs: 10
+total steps: 90714
+patch size: 2
+cut balancing
+conv3: 2,2,400
+fc1: 1200

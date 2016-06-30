@@ -1,0 +1,53 @@
+This file describes for each run the chosen parameters.
+
+run name: eval_preproc2
+channels: 3
+no preprocessing
+training size: 40
+validation size: 10
+test size: 50
+batch size: 64
+epochs: 20
+total steps: 4495
+patch size: 8
+cut balancing
+conv1: 4,4,200
+conv2: 4,4,300
+conv3: 2,2,400
+fc1: 1200
+mean validation error = 27.107
+
+
+run name: eval_preproc3
+channels: 6
+preprocessing: sat, light, 1 tex
+training size: 90
+validation size: 10
+test size: 50
+batch size: 64
+epochs: 4
+total steps: 4495
+patch size: 8
+cut balancing
+conv1: 4,4,200
+conv2: 4,4,300
+conv3: 2,2,400
+fc1: 1200
+mean validation error = 
+
+run name: eval_preproc4
+channels: 9
+preprocessing: sat, light, GLCM
+training size: 90
+validation size: 10
+test size: 50
+batch size: 64
+epochs: 4
+total steps: 4495
+patch size: 8
+cut balancing
+conv1: 4,4,200
+conv2: 4,4,300
+conv3: 2,2,400
+fc1: 1200
+mean validation error = 

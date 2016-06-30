@@ -138,7 +138,7 @@ def label_to_img(imgwidth, imgheight, w, h, labels):
                 l = 1
             else:
                 l = 0
-            array_labels[i:i+h, j:j+w] = l
+            array_labels[j:j+w, i:i+h] = l
             idx = idx + 1
     return array_labels
 
