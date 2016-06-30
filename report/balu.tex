@@ -29,7 +29,7 @@
 \section{Introduction}
 Image segmentation is a classic computer vision problem. But the reappearance of neural networks also made this problem interesting in new dicipline, the convolutional neural network (CNN). We tackle the problem of road segmentation in images taken from Google Maps with a CNN. Therefore we developed a new pipeline based on CNN, coupled with pre- and postprocessing to solve the challenging task. Our approach makes it's main contribution with a preprocessing and sample generation method.
 
-\section{[Models and Methods}
+\section{Models and Methods}
 First we preprocess the images to obtain more additional information which is not captured in RGB image data. Section .. explains the different methods we tried.
 Then we divided the image in patches of different sizes. We tried different parameters (2,4,8,16,32) for the patch size resulting in different coarseness levels. Section .. will explain how specifically an individual patch has been generated. Those patches are packed into batches and fed into the CNN whose configuration is further detailed in section ... Finally we have developed a postprocessing method to combine predictions from different coarseness levels and remove false positives from the final prediction.
 
@@ -90,7 +90,8 @@ Figure \ref{fig:preproc_simple} shows the resulting channel.
 \subsection{Sample generation}
 1 random generation
 2 overlapping patches
-3 flip and rotate
+3 flip and rotate\\
+Maybe only talk about that in the discussion?
 
 \subsection{CNN model}
 For reasons explained below in the postprocessing sections we rely on three different CNN models. They are quite similar and only differ in their number of convolutional layers and filter sizes. 
@@ -125,11 +126,11 @@ Three cases:
 \subsection{Baseline comparision}
 
 \subsection{Postprocessing}
-e.g. image comparision
+We ran the model described above with the following configuration for the three patch sizes. EPOCHS = 20, TRAINING_SIZE = 40, VALIDATION_SIZE = 10, BATCH_SIZE = 63 and 3 CHANNELS. For all the models we calculated the error on the validation set, shown in figure .. Then we ran the postprocessing on the validation predictions and calculated the error again on the new prediction.
 
 
 \section{Discussion}
-
+Things that didn't work: random sample generation...
 
 
 \section{Summary}
