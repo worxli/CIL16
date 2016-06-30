@@ -113,7 +113,7 @@ p(x,y) = 0 otherwise$
 
 
 \section{Evaluation}
-We compare our pipeline to the baseline algorithm. Further we evaluate our preprocessing methods quantitatively and the postprocessing method visually. 
+First we show how our preprocessed data performs in comparision to non augmented data and how different new features affect the prediction accuracy. The we compare our pipeline to the baseline algorithm. Further we evaluate our postprocessing method, combining the models described above. 
 
 \subsection{Preprocessing}
 
@@ -126,7 +126,7 @@ Three cases:
 \subsection{Baseline comparision}
 
 \subsection{Postprocessing}
-We ran the model described above with the following configuration for the three patch sizes. EPOCHS = 20, TRAINING_SIZE = 40, VALIDATION_SIZE = 10, BATCH_SIZE = 63 and 3 CHANNELS. For all the models we calculated the error on the validation set, shown in figure .. Then we ran the postprocessing on the validation predictions and calculated the error again on the new prediction, also shown in figure... 
+We ran the model described above with the following configuration for the three patch sizes. EPOCHS = 10, TRAINING_SIZE = 40, VALIDATION_SIZE = 10, BATCH_SIZE = 63 and 3 CHANNELS. For all the models we calculated the error on the validation set, shown in figure .. Then we ran the postprocessing on the validation predictions and calculated the error again on the new prediction, also shown in figure... 
 
 
 \section{Discussion}
@@ -134,7 +134,7 @@ Things that didn't work: random sample generation...
 
 
 \section{Summary}
-
+Our paper makes two main contributions, we show different data augmentation schemes in the preprocessing section which allows us to recognize more information from the data than given initially. Because our focus was not specifically set on the convolutional neural network its architechture is fairly common and wasn't enhanced much. The greater focus was set on the postprocessing to combine different non-perfect results to gain better predictions. We think that we could show, that using several simple and thus quite fast and parallelizable models, we could get better performance that we got using one more complex model.
 
 \bibliographystyle{IEEEtran}
 \bibliography{balu}
