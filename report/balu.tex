@@ -9,7 +9,7 @@
 
 
 \begin{document}
-\title{CIL 16}
+\title{Preprocessing of High-Resolution Satellite Imagery for subsequent \\Segmentation using Convolutional Neural Networks}
 
 \author{
  Balz Guenat \& Lukas Bischofberger\\
@@ -25,7 +25,6 @@
 \section{Introduction}
 Image segmentation is a classic computer vision problem. But the reappearance of neural networks also made this problem interesting in new dicipline, the convolutional neural network (CNN). We tackle the problem of road segmentation in images taken from Google Maps with a CNN. Therefore we developed a new pipeline based on CNN, coupled with pre- and postprocessing to solve the challenging task. Our approach makes it's main contribution with a preprocessing and sample generation method.
 
-
 \section{[Models and Methods}
 First we preprocess the images to obtain more additional information which is not captured in RGB image data. Section .. explains the different methods we tried.
 Then we divided the image in patches of different sizes. We tried different parameters (2,4,8,16,32) for the patch size resulting in different coarseness levels. Section .. will explain how specifically an individual patch has been generated. Those patches are packed into batches and fed into the CNN whose configuration is further detailed in section ... Finally we have developed a postprocessing method to combine predictions from different coarseness levels and remove false positives from the final prediction.
@@ -33,8 +32,7 @@ Then we divided the image in patches of different sizes. We tried different para
 \subsection{Preprocessing}
 
 We use different preprocessing methods to extend the input data with additional channels.
-Step 1:
-We compute the saturation $S$ and lightness $L$ for each pixel $(R,G,B) \in [0,1]^3$ according to the HSL\footnote{Hue, Saturation, Lightness coordinate representation} system as follows.
+In a first step we compute the saturation $S$ and lightness $L$ for each pixel $(R,G,B) \in [0,1]^3$ according to the HSL\footnote{Hue, Saturation, Lightness coordinate representation} system as follows.
 $$ Cmax := max(R,G,B) $$
 $$ Cmin := min(R,G,B) $$
 $$d := Cmax - Cmin$$
@@ -46,20 +44,44 @@ S :=
 	\frac{d}{1-|2L-1|}, & \text{otherwise}
 \end{cases}
 \]
-We then extend the images by these newly computed channels, such that every pixel is now comprised of 5 values $(R,G,B,S,L) \in [0,1]^5$
+We then extend the images by these newly computed channels, such that every pixel is now comprised of 5 values $(R,G,B,S,L) \in [0,1]^5$. Figure \ref{fig:satlit} shows the resulting channels for the image shown in figure \ref{fig:original_and_truth}.
 
 In a second step we compute texture features.
-We present two different approaches described in steps 2A and 2B, only one of which is used in each model.
-Step 2A:
-This method utilizes the Gray-Level Co-occurrence Matrix (GLCM) computed on the lightness channel.
+We present two different methods which we shall call the \emph{GLCM method} and the \emph{MaxDiff method}, only one of which is used in each model.
+The \emph{GLCM method} utilizes the Gray-Level Co-occurrence Matrix (GLCM) \cite{glcm} as computed on the lightness channel.
+Kirthika et al. \cite{kirthika2011automated} achieved good results using a very similar method.
 For each pixel we compute the GLCM for an offset of 1, angles of 0 and 90 and 8 levels.
 We then use this GLCM to compute the contrast, correlation, energy and homogeneity features of the pixel, yielding 4 additional channels which we append to the pixel.
 Using this method, the preprocessed images are comprised of 9 channels $(R,G,B,S,L,T1,T2,T3,T4)$.
-Step 2B:
-This method is a more lightweight alternative to the above.
+Figure \ref{fig:preproc_glcm} shows the resulting channels.
+The \emph{MaxDiff method} is a more lightweight alternative to the above.
 It is also computed on the lightness channel.
-For each pixel $p$ and its right and lower neighbors $p_r$ and $p_d$, we compute the following feature.
+For each pixel $p$ and its right and lower neighbors $p_r$ and $p_d$, we compute the following contrast channel and append it to the pixel.
 $$ T := max(|p-p_r|,|p-p_d|) \in [0,1] $$
+Using this method, the preprocessed images are comprised of 6 channels $(R,G,B,S,L,T)$.
+Figure \ref{fig:preproc_simple} shows the resulting channel.
+
+\begin{figure}
+	\includegraphics[width=\columnwidth]{pictures/original_and_truth}
+	\caption{Original image and manually set labels}
+	\label{fig:original_and_truth}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=\columnwidth]{pictures/saturation_and_lightness}
+	\caption{Saturation and lightness channels, computed in preprocessing step 1.}
+	\label{fig:satlit}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=\columnwidth]{pictures/preproc1_all}
+	\caption{Contrast, correlation, energy and homogeneity channels, computed in preprocessing step 2A.}
+	\label{fig:preproc_glcm}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=.5\columnwidth]{pictures/preproc2}
+	\caption{Contrast channel, computed in preprocessing step 2B.}
+	\label{fig:preproc_simple}
+\end{figure}
 
 \subsection{Sample generation}
 1 random generation
@@ -104,5 +126,5 @@ e.g. image comparision
 
 
 \bibliographystyle{IEEEtran}
-\bibliography{howto-paper}
+\bibliography{balu}
 \end{document}
