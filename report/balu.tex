@@ -6,6 +6,10 @@
 \usepackage{graphicx}	% For figure environment
 
 \usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{gensymb}
 
 
 \begin{document}
@@ -50,7 +54,7 @@ In a second step we compute texture features.
 We present two different methods which we shall call the \emph{GLCM method} and the \emph{MaxDiff method}, only one of which is used in each model.
 The \emph{GLCM method} utilizes the Gray-Level Co-occurrence Matrix (GLCM) \cite{glcm} as computed on the lightness channel.
 Kirthika et al. \cite{kirthika2011automated} achieved good results using a very similar method.
-For each pixel we compute the GLCM for an offset of 1, angles of 0 and 90 and 8 levels.
+For each pixel we compute the GLCM for an offset of 1, angles of 0° and 90° and 8 levels.
 We then use this GLCM to compute the contrast, correlation, energy and homogeneity features of the pixel, yielding 4 additional channels which we append to the pixel.
 Using this method, the preprocessed images are comprised of 9 channels $(R,G,B,S,L,T1,T2,T3,T4)$.
 Figure \ref{fig:preproc_glcm} shows the resulting channels.
