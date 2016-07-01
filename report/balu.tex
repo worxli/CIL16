@@ -26,11 +26,11 @@
 \maketitle
 
 \begin{abstract}
-  
+	Image segmentation, specifically road detection from satellite imagery, is a computer vision problem that can be solved using convolutional neural networks. This work enhances a basic network architecture by preprocessing the images and postprocessing the predictions produced by the CNN. Two different preprocessing methods which compute texture features are evaluated and compared. Using preprocessing alone, the mean prediction error can be improved from 27.1\% to 23.8\%. Furthermore, our postprocessing method achieves about half the mean error compared to any unprocessed model.
 \end{abstract}
 
 \section{Introduction}
-Image segmentation is a classic computer vision problem. But the reappearance of neural networks also made this problem interesting in new dicipline, the convolutional neural network (CNN). We tackle the problem of road segmentation in images taken from Google Maps with a CNN. Therefore we developed a new pipeline based on CNN, coupled with pre- and postprocessing to solve the challenging task. Our approach makes it's main contribution with a preprocessing and sample generation method.
+Image segmentation is a classic computer vision problem. We tackle the problem of road detection in satellite images. More specifically, the goal is to label each pixel of a given high resolution color image either as foreground (road) or background (not road). The reappearance of neural networks made this problem interesting in new dicipline, convolutional neural networks (CNN). We developed a new pipeline using a CNN coupled with pre- and postprocessing to solve the challenging task. Our main contributions are an assessment and comparison of different preprocessing methods and the use of postprocessing to improve prediction accuracy.
 
 \section{Models and Methods}
 First we preprocess the images to obtain more additional information which is not captured in RGB image data. Section .. explains the different methods we tried.
