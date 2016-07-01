@@ -61,12 +61,18 @@ For each pixel we compute the GLCM for an offset of 1, angles of 0° and 90° an
 We then use this GLCM to compute the contrast, correlation, energy and homogeneity features of the pixel, yielding 4 additional channels which we append to the pixel.
 Using this method, the preprocessed images are comprised of 9 channels $(R,G,B,S,L,T1,T2,T3,T4)$.
 Figure \ref{fig:preproc_glcm} shows the resulting channels.
-The \emph{MaxDiff method} is a more lightweight alternative to the above.
-It is also computed on the lightness channel.
+
+The main disadvantage of the \emph{GLCM method} is its complexity.
+Depending on implementation and hardware, the preprocessing of one image with this method can take up to several minutes, heavily restricting the applicability of this method to real-time classification.
+For this reason, we also present the \emph{MaxDiff method} which is a more lightweight alternative to the above.
+It computes a contrast channel, also on the basis of the lightness channel.
 For each pixel $p$ and its right and lower neighbors $p_r$ and $p_d$, we compute the following contrast channel and append it to the pixel.
 $$ T := max(|p-p_r|,|p-p_d|) \in [0,1] $$
 Using this method, the preprocessed images are comprised of 6 channels $(R,G,B,S,L,T)$.
 Figure \ref{fig:preproc_simple} shows the resulting channel.
+
+A visual inspection of the channels produced by these two methods reveals a close similarity between all of them.
+Because of this similarity, we expect both methods to have similar effects on the final prediction.
 
 \begin{figure}
 	\includegraphics[width=\columnwidth]{pictures/original_and_truth}
@@ -105,13 +111,13 @@ The convolutional layers are followed by two fully connected layers with depth 1
 \subsection{Postprocessing}
 As stated above we developed different models with changing patch sizes. These make all predictions which have their advantages. For example a CNN with patch sizes 2 can accurately predict small areas, this is specifically useful for removing false positives as e.g. green areas of tress should not be predicted as road if they're not covering the road. On the other hand with small patch sizes our model is not able to distinguish between a rooftop and a road which are both gray. Therefore we also need the bigger context to avoid these kind of false positives. In the postprocessing we are combining the predictions of models with patch sizes of [2,8,16] pixels. A final prediction of a pixel is classified as road if the sum of the predictions over the different patch sizes is above a certain threshold. We calculate the predictions of all patches with size 16 (submission size) independently for the different predictions, then we sum them up and classify only the submission patch sizes. See the following equation where $x$ and $y$ are the pixel coordinated in an image and $i$ and $j$ are the pixel coordinates in a patch.
 
-\[
-pr(x,y) :=
-\begin{cases}
-	1 & \text{if} \sum_{s={2,8,16}} \mean[pr(i,j,s)] > threshold\\
-	0 & \text{otherwise}
-\end{cases}
-\]
+%\[
+%pr(x,y) :=
+%\begin{cases}
+%	1 & \text{if} \sum_{s={2,8,16}} \mean[pr(i,j,s)] > threshold\\
+%	0 & \text{otherwise}
+%\end{cases}
+%\]
 
 
 \section{Evaluation}
@@ -119,11 +125,12 @@ First we show how our preprocessed data performs in comparison to non augmented 
 
 \subsection{Preprocessing}
 
-Three cases: 
-1 w/o data augmentation.
-2 with saturation and lumination
-3 with edge detection
-4 with texture from literature
+We compare the prediction error of the two different preprocessing methods and no preprocessing at all.
+We train each model for 4495 steps at a batch size of 64 image patches and compute the mean prediction error on an validation set of 10 images.
+
+With no preprocessing, the model achieves a mean error of 27.1\%.
+Using the \emph{GLCM method}, the mean error drops to 23.1\%.
+Finally, using the \emph{MaxDiff method} a mean error of 23.8\% is achieved.
 
 \subsection{Baseline comparison}
 The baseline algorithm based on CNN was trained on 60 image and evaluated on a validation set of 10 images. We trained our pipeline on the same data and show the resulting errors in \ref{fig:baseline}. 
@@ -163,8 +170,11 @@ For all the models we calculated the error on the validation set. Then we ran th
 
 
 \section{Discussion}
-Things that didn't work: random sample generation...
 
+\subsection{Preprocessing}
+As expected, the addition of more channels enables the model to make more accurate predictions.
+Furthermore, we also see that the more involved \emph{GLCM method} does not produce significantly better results than the \emph{MaxDiff method}.
+Considering the large performance advantage of \emph{MaxDiff} over \emph{GLCM}, we see \emph{MaxDiff} clearly as the better choice.
 
 \section{Summary}
 Our paper makes two main contributions, we show different data augmentation schemes in the preprocessing section which allows us to recognize more information from the data than given initially. Because our focus was not specifically set on the convolutional neural network its architechture is fairly common and wasn't enhanced much. The greater focus was set on the postprocessing to combine different non-perfect results to gain better predictions. We think that we could show, that using several simple and thus quite fast and parallelizable models, we could get better performance that we got using one more complex model.
