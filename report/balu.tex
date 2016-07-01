@@ -142,7 +142,7 @@ The baseline algorithm based on CNN was trained on 60 image and evaluated on a v
 	\label{fig:baseline}
 \end{figure}
 
-For the second baseline algorithm we trained it on 60 images again and predicted \ref{fig:scikit} for comparison to our pipeline.
+For the second baseline algorithm we trained it on 60 images again and predicted the one in figure \ref{fig:scikit} for comparison to our pipeline.
 
 \begin{figure}
 	\includegraphics[width=\columnwidth]{pictures/baseline1-comp}
@@ -172,9 +172,14 @@ For all the models we calculated the error on the validation set. Then we ran th
 \section{Discussion}
 
 \subsection{Preprocessing}
+
 As expected, the addition of more channels enables the model to make more accurate predictions.
 Furthermore, we also see that the more involved \emph{GLCM method} does not produce significantly better results than the \emph{MaxDiff method}.
 Considering the large performance advantage of \emph{MaxDiff} over \emph{GLCM}, we see \emph{MaxDiff} clearly as the better choice.
+
+\subsection{Postprocessing}
+
+Our evaluation of the postprocessing shows that we can reliably combine different models which are run independently to gain better predictions. Unfortunately this approach relies on the theory that the different models have different strengths. If in any case no model is able to detect a certain structure the postprocessing won't help either. So in future research we would investigate in how to train model with certain strengths.
 
 \section{Summary}
 Our paper makes two main contributions, we show different data augmentation schemes in the preprocessing section which allows us to recognize more information from the data than given initially. Because our focus was not specifically set on the convolutional neural network its architechture is fairly common and wasn't enhanced much. The greater focus was set on the postprocessing to combine different non-perfect results to gain better predictions. We think that we could show, that using several simple and thus quite fast and parallelizable models, we could get better performance that we got using one more complex model.
