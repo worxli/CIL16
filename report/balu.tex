@@ -4,12 +4,15 @@
 %\usepackage{balance}
 \usepackage{url}
 \usepackage{graphicx}	% For figure environment
+\usepackage{listings} 
 
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage{gensymb}
+
+\lstset{language=Python} 
 
 
 \begin{document}
@@ -87,12 +90,6 @@ Figure \ref{fig:preproc_simple} shows the resulting channel.
 	\label{fig:preproc_simple}
 \end{figure}
 
-\subsection{Sample generation}
-1 random generation
-2 overlapping patches
-3 flip and rotate\\
-Maybe only talk about that in the discussion?
-
 \subsection{CNN model}
 For reasons explained below in the postprocessing sections we rely on three different CNN models. They are quite similar and only differ in their number of convolutional layers and filter sizes. 
 \subsection{Patch size 2}
@@ -104,16 +101,19 @@ We used a simple convolutional network with three convolutional layers each foll
 
 
 \subsection{Postprocessing}
-As stated above we developed different models with changing patch sizes. These make all predictions which have their advantages. For example a CNN with patch sizes 2 can accurately predict small areas, this is specifically useful for removing false positives as e.g. green areas of tress should not be predicted as road if they're not covering the road. On the other hand with small patch sizes our model is not able to distinguish between a rooftop and a road which are both gray. Therefore we also need the bigger context to avoid these kind of false positives. In the postprecessing we are combining the predictions of models with patch sizes of [2,8,16] pixels. A final prediction of a pixel is basically classified as road if the sum of the predictions over the different patch sizes is above a certain threshold. 
+As stated above we developed different models with changing patch sizes. These make all predictions which have their advantages. For example a CNN with patch sizes 2 can accurately predict small areas, this is specifically useful for removing false positives as e.g. green areas of tress should not be predicted as road if they're not covering the road. On the other hand with small patch sizes our model is not able to distinguish between a rooftop and a road which are both gray. Therefore we also need the bigger context to avoid these kind of false positives. In the postprocessing we are combining the predictions of models with patch sizes of [2,8,16] pixels. A final prediction of a pixel is classified as road if the sum of the predictions over the different patch sizes is above a certain threshold. We calculate the predictions of all patches with size 16 (submission size) independently for the different predictions, then we sum them up and classify only the submission patch sizes. See the following equation where $x$ and $y$ are the pixel coordinated in an image and $i$ and $j$ are the pixel coordinates in a patch.
 
-$p(x,y) = 1 if (p2(x,y)+p4(x,y)+p8(x,y)..))/n > th
-p(x,y) = 0 otherwise$
-
-
+\[
+pr(x,y) :=
+\begin{cases}
+	1 & \text{if} \sum_{s={2,8,16}} \mean[pr(i,j,s)] > threshold\\
+	0 & \text{otherwise}
+\end{cases}
+\]
 
 
 \section{Evaluation}
-First we show how our preprocessed data performs in comparision to non augmented data and how different new features affect the prediction accuracy. The we compare our pipeline to the baseline algorithm. Further we evaluate our postprocessing method, combining the models described above. 
+First we show how our preprocessed data performs in comparison to non augmented data and how different new features affect the prediction accuracy. The we compare our pipeline to the baseline algorithm. Further we evaluate our postprocessing method, combining the models described above. 
 
 \subsection{Preprocessing}
 
@@ -126,7 +126,22 @@ Three cases:
 \subsection{Baseline comparision}
 
 \subsection{Postprocessing}
-We ran the model described above with the following configuration for the three patch sizes. EPOCHS = 10, TRAINING_SIZE = 40, VALIDATION_SIZE = 10, BATCH_SIZE = 63 and 3 CHANNELS. For all the models we calculated the error on the validation set, shown in figure .. Then we ran the postprocessing on the validation predictions and calculated the error again on the new prediction, also shown in figure... 
+We ran the model described above with the following configuration for the three patch sizes. 
+\begin{lstlisting}
+EPOCHS = 10
+TRAINING_SIZE = 60
+VALIDATION_SIZE = 10
+BATCH_SIZE = 63
+NUM_CHANNELS = 3
+\end{lstlisting}
+For all the models we calculated the error on the validation set. Then we ran the postprocessing on the validation predictions with varying thresholds and calculated the error on the new predictions. See the results in figure \ref{fig:postprocessing} where we used thresholds between 2 and 3.2. Unfortunately the error doesn't decrease anymore while increasing the threshold. Also the optimal threshold for test data does not equal the one for validation data.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\columnwidth]{pictures/postprocessing}
+	\caption{Mean errors of different patch sizes and postprocessed predictions with variying threshold}
+	\label{fig:postprocessing}
+\end{figure}
 
 
 \section{Discussion}
