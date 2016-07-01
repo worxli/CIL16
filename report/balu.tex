@@ -163,7 +163,8 @@ For all the models we calculated the error on the validation set. Then we ran th
 
 
 \section{Discussion}
-Things that didn't work: random sample generation...
+
+Our evaluation of the postprocessing shows that we can reliably combine different models which are run independently to gain better predictions. Unfortunately this approach relies on the theory that the different models have different strengths. If in any case no model is able to detect a certain structure the postprocessing won't help either. So in future research we would investigate in how to train model with certain strengths.
 
 
 \section{Summary}
