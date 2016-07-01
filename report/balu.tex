@@ -112,8 +112,7 @@ The convolutional layers are followed by two fully connected layers with depth 1
     
 \subsection{Postprocessing}
 Each of the described CNNs have certain advantages and disadvantages. For example, a CNN with patch sizes 2 can accurately predict small areas. This is especially useful for removing false positives. Green areas of tress for example should not be predicted as roads if they are not covering the road. On the other hand, with small patch sizes the model is not able to distinguish between a rooftop and a road which are both gray. Therefore we also need the bigger context to avoid these kind of false positives. In postprocessing the predictions of models with patch sizes of [2,8,16] pixels are combined. A pixel is classified as road if the sum of the predictions over the different patch sizes is above a certain threshold.
-%TODO unclear from here :/
-We calculate the predictions of all patches with size 16 independently for the different predictions, then we sum them up and classify only the submission patch sizes. See the following equation where $x$ and $y$ are the pixel coordinated in an image and $i$ and $j$ are the pixel coordinates in a patch.
+First we calculate the predictions of all patches of size 16 independently for the different predictions. Then we sum up the predictions of the different models and classify only the submission patch sizes. See the following equation where $x$ and $y$ are the pixel coordinates in an image and $i$ and $j$ are the pixel coordinates in a patch.
 
 \[
 pr(x,y) :=
@@ -154,8 +153,7 @@ The baseline algorithm based on CNN was trained on 60 images and evaluated on a 
 	\label{fig:baseline}
 \end{figure}
 
-%TODO fix this sentence
-For the second baseline algorithm we trained it on 60 images again and predicted the one in figure \ref{fig:scikit} for comparison to our pipeline.
+We also trained the second baseline algorithm (logistic regression) on 60 images  and predicted one image in figure \ref{fig:scikit} for visual comparison to our pipeline.
 
 \begin{figure}
 	\includegraphics[width=\columnwidth]{pictures/baseline1-comp}
